@@ -12,5 +12,5 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	con.GetWriterCon().AutoMigrate(&domain.User{})
+	con.GetConnection().AutoMigrate(&domain.User{})
 }

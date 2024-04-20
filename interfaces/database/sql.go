@@ -6,6 +6,5 @@ type Connection interface {
 	ConnectDb()
 	ConnectWriteDb()
 	ConnectReadDb()
-	GetWriterCon() *gorm.DB
-	GetReadCon() *gorm.DB
+	GetConnection() *gorm.DB
 }

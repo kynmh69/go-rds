@@ -5,6 +5,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/plugin/dbresolver"
 )
 
 func NewMySQLConnection() *mySQLConnection {
@@ -14,41 +15,31 @@ func NewMySQLConnection() *mySQLConnection {
 }
 
 type mySQLConnection struct {
-	writeDb *gorm.DB
-	readDb  *gorm.DB
-}
-
-// GetReadCon implements database.Connection.
-func (con *mySQLConnection) GetReadCon() *gorm.DB {
-	return con.readDb
+	db     *gorm.DB
+	config *config
 }
 
 // GetWriterCon implements database.Connection.
-func (con *mySQLConnection) GetWriterCon() *gorm.DB {
-	return con.writeDb
+func (con *mySQLConnection) GetConnection() *gorm.DB {
+	return con.db
 }
 
 func (con *mySQLConnection) ConnectDb() {
-	con.ConnectReadDb()
+	con.config = NewMySQLConf()
 	con.ConnectWriteDb()
+	con.ConnectReadDb()
 }
 
 func (con *mySQLConnection) ConnectWriteDb() {
 	var err error
-	config := NewMySQLConf()
-
-	con.writeDb, err = gorm.Open(mysql.Open(config.ConfigWrite.FormatDSN()), &gorm.Config{})
+	con.db, err = gorm.Open(mysql.Open(con.config.ConfigWrite.FormatDSN()), &gorm.Config{})
 	if err != nil {
 		log.Fatalln("cannot open write db")
 	}
 }
 
 func (con *mySQLConnection) ConnectReadDb() {
-	var err error
-	config := NewMySQLConf()
-
-	con.readDb, err = gorm.Open(mysql.Open(config.ConfigRead.FormatDSN()), &gorm.Config{})
-	if err != nil {
-		log.Fatalln("cannot open read db")
-	}
+	con.db.Use(dbresolver.Register(dbresolver.Config{
+		Replicas: []gorm.Dialector{mysql.Open(con.config.ConfigRead.FormatDSN())},
+	}))
 }
