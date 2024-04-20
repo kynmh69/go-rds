@@ -1,0 +1,33 @@
+services:
+  database_writer:
+    image: mysql:8.0
+    volumes:
+      - mysql_w:/var/lib/mysql
+    environment:
+      - TZ=Asia/Tokyo
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=passwd
+    networks:
+      - net-1
+  database_reader:
+    image: mysql:8.0
+    volumes:
+      - mysql_r:/var/lib/mysql
+    environment:
+      - TZ=Asia/Tokyo
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=passwd
+    networks:
+      - net-1
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+volumes:
+  mysql_w:
+  mysql_r:
