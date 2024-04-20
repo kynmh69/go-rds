@@ -7,17 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type MySQLConnection struct {
+type mySQLConnection struct {
 	WriteDb *gorm.DB
 	ReadDb  *gorm.DB
 }
 
-func (con *MySQLConnection) ConnectDb() {
+func (con *mySQLConnection) ConnectDb() {
 	con.connectReadDb()
 	con.connectWriteDb()
 }
 
-func (con *MySQLConnection) connectWriteDb() {
+func (con *mySQLConnection) connectWriteDb() {
 	var err error
 	config := NewMySQLConf()
 
@@ -27,7 +27,7 @@ func (con *MySQLConnection) connectWriteDb() {
 	}
 }
 
-func (con *MySQLConnection) connectReadDb() {
+func (con *mySQLConnection) connectReadDb() {
 	var err error
 	config := NewMySQLConf()
 
