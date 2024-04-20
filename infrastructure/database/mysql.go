@@ -32,7 +32,9 @@ func (con *mySQLConnection) ConnectDb() {
 
 func (con *mySQLConnection) ConnectWriteDb() {
 	var err error
-	con.db, err = gorm.Open(mysql.Open(con.config.ConfigWrite.FormatDSN()), &gorm.Config{})
+	con.db, err = gorm.Open(mysql.Open(con.config.ConfigWrite.FormatDSN()), &gorm.Config{
+		Logger: InitLogger(),
+	})
 	if err != nil {
 		log.Fatalln("cannot open write db")
 	}
