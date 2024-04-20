@@ -73,7 +73,7 @@ func (c *config) getPort() string {
 }
 
 func (c *config) getDbName() string {
-	dbName := "3306"
+	dbName := "test"
 	if d, ok := os.LookupEnv(database.DB_NAME); ok {
 		dbName = d
 	}
