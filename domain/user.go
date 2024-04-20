@@ -9,9 +9,9 @@ import (
 
 type User struct {
 	gorm.Model
-	ID        uuid.UUID `json:"id" gorm:"type:uuid;default:uuid_generate_v4();primaryKey"`
-	Username  string    `json:"username"`
-	Password  string    `json:"password"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        uuid.UUID `json:"id" gorm:"type:BINARY;default:(UUID_TO_BIN(UUID()));primaryKey;not null"`
+	Username  string    `json:"username" gorm:"not null"`
+	Password  string    `json:"password" gorm:"not null"`
+	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime; not null"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime; not null"`
 }
