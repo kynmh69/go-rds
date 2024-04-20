@@ -10,7 +10,6 @@ var (
 	errInvalidSQLDatabaseInstance = errors.New("invalid sql db instance")
 )
 
-
 const (
 	InstanceMySQL int = iota
 )
@@ -18,7 +17,7 @@ const (
 func NewDatabaseSQLFactory(instance int) (database.Connection, error) {
 	switch instance {
 	case InstanceMySQL:
-		return 
+		return NewMySQLConnection(), nil
 	default:
 		return nil, errInvalidSQLDatabaseInstance
 	}
