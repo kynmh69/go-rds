@@ -35,14 +35,14 @@ func (c *config) SetConfigRead() {
 }
 
 func (c *config) getHostWrite() string {
-	hostname := "database_writer"
+	hostname := "database"
 	if h, ok := os.LookupEnv(database.DB_HOST); ok {
 		hostname = h
 	}
 	return hostname
 }
 func (c *config) getHostRead() string {
-	hostname := "database_reader"
+	hostname := "database"
 	if h, ok := os.LookupEnv(database.DB_HOST_R); ok {
 		hostname = h
 	}

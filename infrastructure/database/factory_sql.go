@@ -14,7 +14,7 @@ const (
 	InstanceMySQL int = iota
 )
 
-func NewDatabaseSQLFactory(instance int) (database.Connection, error) {
+func NewSQLFactory(instance int) (database.Connection, error) {
 	switch instance {
 	case InstanceMySQL:
 		return NewMySQLConnection(), nil

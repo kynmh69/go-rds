@@ -14,8 +14,18 @@ func NewMySQLConnection() *mySQLConnection {
 }
 
 type mySQLConnection struct {
-	WriteDb *gorm.DB
-	ReadDb  *gorm.DB
+	writeDb *gorm.DB
+	readDb  *gorm.DB
+}
+
+// GetReadCon implements database.Connection.
+func (con *mySQLConnection) GetReadCon() *gorm.DB {
+	return con.readDb
+}
+
+// GetWriterCon implements database.Connection.
+func (con *mySQLConnection) GetWriterCon() *gorm.DB {
+	return con.writeDb
 }
 
 func (con *mySQLConnection) ConnectDb() {
@@ -27,7 +37,7 @@ func (con *mySQLConnection) ConnectWriteDb() {
 	var err error
 	config := NewMySQLConf()
 
-	con.WriteDb, err = gorm.Open(mysql.Open(config.ConfigWrite.FormatDSN()), &gorm.Config{})
+	con.writeDb, err = gorm.Open(mysql.Open(config.ConfigWrite.FormatDSN()), &gorm.Config{})
 	if err != nil {
 		log.Fatalln("cannot open write db")
 	}
@@ -37,7 +47,7 @@ func (con *mySQLConnection) ConnectReadDb() {
 	var err error
 	config := NewMySQLConf()
 
-	con.WriteDb, err = gorm.Open(mysql.Open(config.ConfigRead.FormatDSN()), &gorm.Config{})
+	con.readDb, err = gorm.Open(mysql.Open(config.ConfigRead.FormatDSN()), &gorm.Config{})
 	if err != nil {
 		log.Fatalln("cannot open read db")
 	}
