@@ -2,7 +2,9 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"time"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/kynmh69/go-rds/interfaces/database"
@@ -23,6 +25,8 @@ func (c *config) SetConfigWrite() {
 	c.ConfigWrite.Passwd = c.getPasswd()
 	c.ConfigWrite.DBName = c.getDbName()
 	c.ConfigWrite.Net = c.getProtocol()
+	c.ConfigWrite.Collation = c.getCharSet()
+	c.ConfigWrite.Loc = c.getLocation()
 }
 
 func (c *config) SetConfigRead() {
@@ -32,6 +36,8 @@ func (c *config) SetConfigRead() {
 	c.ConfigRead.Passwd = c.getPasswd()
 	c.ConfigRead.DBName = c.getDbName()
 	c.ConfigRead.Net = c.getProtocol()
+	c.ConfigWrite.Collation = c.getCharSet()
+	c.ConfigWrite.Loc = c.getLocation()
 }
 
 func (c *config) getHostWrite() string {
@@ -83,6 +89,28 @@ func (c *config) getDbName() string {
 func (c *config) getProtocol() string {
 	protocol := PROTOCOL
 	return protocol
+}
+
+func (c *config) getCharSet() string {
+	char := "utf8mb4_unicode_ci"
+	if c, ok := os.LookupEnv(database.DB_CHAR); ok {
+		char = c
+	}
+	return char
+}
+
+func (c *config) getLocation() *time.Location {
+	loc, err := time.LoadLocation(database.DEF_LOC)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	if l, ok := os.LookupEnv(database.DB_LOC); ok {
+		loc, err = time.LoadLocation(l)
+		if err != nil {
+			log.Fatalln(err)
+		}
+	}
+	return loc
 }
 
 func NewMySQLConf() *config {

@@ -9,6 +9,9 @@ const (
 	DB_USER   = "DB_USER"
 	DB_PASS   = "DB_PASS"
 	DB_NAME   = "DB_NAME"
+	DB_CHAR   = "DB_CHAR"
+	DB_LOC    = "DB_LOC"
+	DEF_LOC   = "Asia/Tokyo"
 )
 
 type Config interface {
