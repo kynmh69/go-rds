@@ -5,6 +5,7 @@ import (
 
 	"github.com/kynmh69/go-rds/domain"
 	"github.com/kynmh69/go-rds/infrastructure/database"
+	"github.com/kynmh69/go-rds/usecases"
 )
 
 func main() {
@@ -13,4 +14,7 @@ func main() {
 		log.Fatalln(err)
 	}
 	con.GetConnection().AutoMigrate(&domain.User{})
+	usecases.CreateUser(con)
+	user := usecases.FindByUsername(con, "test_user_1")
+	log.Println(user)
 }

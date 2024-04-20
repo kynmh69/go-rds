@@ -27,6 +27,7 @@ func (c *config) SetConfigWrite() {
 	c.ConfigWrite.Net = c.getProtocol()
 	c.ConfigWrite.Collation = c.getCharSet()
 	c.ConfigWrite.Loc = c.getLocation()
+	c.ConfigWrite.ParseTime = true
 }
 
 func (c *config) SetConfigRead() {
@@ -36,8 +37,9 @@ func (c *config) SetConfigRead() {
 	c.ConfigRead.Passwd = c.getPasswd()
 	c.ConfigRead.DBName = c.getDbName()
 	c.ConfigRead.Net = c.getProtocol()
-	c.ConfigWrite.Collation = c.getCharSet()
-	c.ConfigWrite.Loc = c.getLocation()
+	c.ConfigRead.Collation = c.getCharSet()
+	c.ConfigRead.Loc = c.getLocation()
+	c.ConfigRead.ParseTime = true
 }
 
 func (c *config) getHostWrite() string {
